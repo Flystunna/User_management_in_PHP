@@ -8,47 +8,6 @@
 		href = "bootstrap-3.3.7-dist/css/bootstrap.css"
 		href = "bootstrap-3.3.7-dist/css/bootstrap.min.css">
 <!-- Javascript validation for user inputs -->
-<script>
-function validate()
-{ 
-var fullname = document.register.fullname.value;
-var email = document.register.email.value;
-var username = document.register.username.value; 
-var password = document.register.password.value;
-var conpassword= document.register.conpassword.value;
-var gender = document.register.gender.value;
-if (fullname==null || fullname=="")
-{ 
-alert("Full Name can't be blank"); 
-return false; 
-}
-else if (email==null || email=="")
-{ 
-alert("Email can't be blank"); 
-return false; 
-}
-else if (gender==null || gender=="")
-{ 
-alert("Select a Gender"); 
-return false; 
-}
-else if (username==null || username=="")
-{ 
-alert("Username can't be blank"); 
-return false; 
-}
-else if(password.length&amp;lt;6)
-{ 
-alert("Password must be at least 6 characters long."); 
-return false; 
-} 
-else if (password!=conpassword)
-{ 
-alert("Confirm Password should match with the Password"); 
-return false; 
-} 
-} 
-</script>
 <style>
 
 body{
@@ -61,9 +20,40 @@ body{
 <div class="login-box">
 <div class="row">
 	<div class="col-md-6" style="background-color: rgb(192,192,192); border-radius: 25px">
+			<?php
+include("dbconnection.php"); // include the connection object from the DBConnection.php
+
+
+if ($_SERVER['REQUEST_METHOD'] == 'POST')
+{ 
+$inFullname = $_POST["fullname"]; // as the method type in the form is "post" we are using $_POST otherwise it would be $_GET[]
+$inEmail = $_POST["email"];
+$inUsername = $_POST["username"];
+$inPassword = $_POST["password"];
+$inLocation = $_POST["location"];
+$inGender = $_POST["gender"];
+$encryptPassword = password_hash($inPassword, PASSWORD_DEFAULT);
+$stmt = $db->prepare("INSERT INTO PROFILE(FULLNAME, EMAIL, USERNAME, PASSWORD, LOCATION, GENDER) VALUES(?, ?, ?, ?,?,?)"); //Fetching all the records with input credentials
+$stmt->bind_param("ssssss", $inFullname, $inEmail, $inUsername, $encryptPassword, $inLocation, $inGender); //Where s indicates string type. You can use i-integer, d-double
+$stmt->execute();
+$result = $stmt->affected_rows;
+$stmt -> close();
+$db -> close(); 
+if($result > 0)
+{
+header("location: regsuccess.php"); // user will be taken to the success page
+}
+else
+{
+echo '<label>Oops. Something went wrong. Username or Email already exists.Please try again </label>'; 
+?>
+<?php 
+}
+}
+?>
 		<br/>
 	<h2> Register</h2>
-	<form name="register" action="register.php" onsubmit="return validate();" method="post">
+	<form name="register" action="registerform.php" onsubmit="return validate();" method="post">
 	<div class = "form-group">
 		 <label>Name:</label>
 		 <input type="text" name="fullname" placeholder="Enter Full Name" class="form-control" required>
@@ -75,10 +65,6 @@ body{
 		<div class="form-group">
 		<label>Password:</label>
 		<input type="password" name="password" class="form-control" placeholder="Enter Password"  required>
-		</div>
-		<div class="form-group">
-		<label>Confirm Password:</label>
-		<input type="password" name="conpassword" class="form-control" placeholder="Enter Password"  required>
 		</div>
 		<div class="form-group">
 		<label>Select State:</label>
