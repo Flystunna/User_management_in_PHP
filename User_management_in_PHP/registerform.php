@@ -16,6 +16,32 @@ body{
 </style> 
 </head>
 <body>
+		<div class="navbar navbar-expand-lg fixed-top navbar-dark bg-info">
+      <div class="container">
+        <a href="../" class="navbar-brand">Pablo Inc.</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarResponsive">
+          <ul class="navbar-nav">
+            <li class="nav-item">
+              <a class="nav-link" href="index.php">Home</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="index.php">About</a>
+            </li>
+          </ul>
+
+          <ul class="nav navbar-nav ml-auto">
+            <li class="nav-item">
+              <a class="nav-link" href="index.php" target="_blank">Contact Us</a>
+            </li>
+          </ul>
+
+        </div>
+      </div>
+    </div>
+    <br/><br/><br/><br/>
 <div class="container">
 <div class="login-box">
 <div class="row">
@@ -41,7 +67,8 @@ $stmt -> close();
 $db -> close(); 
 if($result > 0)
 {
-header("location: regsuccess.php"); // user will be taken to the success page
+echo "Registration successful"; 
+header("location: loginform.php"); // user will be taken to the success page
 }
 else
 {
